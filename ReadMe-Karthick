@@ -1,0 +1,9 @@
+Creation date: 23/01/2021
+Author: Karthick
+
+This project is based on the example below.
+
+https://docs.docker.com/language/python/build-images/
+
+* This project demonstrates sample Python flask applicaion running on port 5000
+* This flask app is containerised based on the example in above link
