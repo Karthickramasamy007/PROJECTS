@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        state("push to Docker hub") {
+        stage("push to Docker hub") {
             steps{
                 script {
                     docker.withRegistry('https://registry.hub.docker.com',registryCredentials) {
