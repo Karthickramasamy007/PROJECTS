@@ -1,49 +1,40 @@
-def img //Global variable
 pipeline {
-
-    environment {
-        registry = "Karthickramasamy007/PROJECTS"
-        registryCredentials = "docker_credentials"
-        dockerImage = ""
+  environment {
+    imagename = "kevalnagda/flaskapp"
+    registryCredential = 'kevalnagda'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git([url: 'https://github.com/Karthickramasamy007/movieapp.git', branch: 'main', credentialsId: 'ad6ad3e5-5046-4297-a18a-16b9a8aaf96f'])
+ 
+      }
     }
-
-    agent any
-
-    stages {
-
-        stage("Chekout") {
-            steps{
-
-                git branch: 'master', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
-
-            }
-
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
         }
-
-        stage("Build Image") {
-            steps{
-                script{
-                    imt = registry + ":$env.BUILD_ID"
-                    println ("${img}")
-                    dockerImage = docker.build("${img}")
-                }
-            }
-        }
-
-        stage("testing") {
-            steps {
-                sh 'docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
-            }
-        }
-
-        stage("push to Docker hub") {
-            steps{
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com',registryCredentials) {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
+      }
     }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $imagename:$BUILD_NUMBER"
+         sh "docker rmi $imagename:latest"
+ 
+      }
+    }
+  }
 }
