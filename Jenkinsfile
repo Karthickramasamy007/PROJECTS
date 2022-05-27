@@ -13,7 +13,9 @@ pipeline {
 
         stage("Chekout") {
             steps{
-                git 'https://github.com/Karthickramasamy007/PROJECTS.git'
+
+                git branch: 'master', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
+
             }
 
         }
