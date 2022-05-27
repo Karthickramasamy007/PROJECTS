@@ -12,14 +12,14 @@ pipeline {
     stages {
 
         stage("Chekout") {
-            step{
+            steps{
                 git 'https://github.com/Karthickramasamy007/PROJECTS.git'
             }
 
         }
 
         stage("Build Image") {
-            step{
+            steps{
                 script{
                     imt = registry + ":$env.BUILD_ID"
                     println ("${img}")
@@ -29,13 +29,13 @@ pipeline {
         }
 
         stage("testing") {
-            step {
+            steps {
                 sh 'docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
             }
         }
 
         state("push to Docker hub") {
-            step{
+            steps{
                 script {
                     docker.withRegistry('https://registry.hub.docker.com',registryCredentials) {
                         dockerImage.push()
