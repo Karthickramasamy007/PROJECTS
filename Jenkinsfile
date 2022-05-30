@@ -24,6 +24,8 @@ pipeline {
             steps{
 
                 git branch: 'main', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
+                sh 'mkdir workspace'
+                sh 'git clone https://github.com/Karthickramasamy007/PROJECTS.git'
 
             }
 
