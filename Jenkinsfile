@@ -1,5 +1,5 @@
 pipeline {
-    agent docker
+    agent any
 
     triggers {
         pollSCM('*/5 * * * 1-5')
@@ -12,23 +12,48 @@ pipeline {
     }
     environment {
       PATH="/var/lib/jenkins/miniconda3/bin:$PATH"
+      registry = "Karthickramasamy007/PROJECTS"
+      registryCredentials = "docker_credentials"
+      dockerImage = ""
+        
     }
 
     stages {
 
-        stage ("Code pull"){
+        stage("Chekout") {
             steps{
-                checkout scm
+
+                git branch: 'master', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
+
+            }
+
+        }
+
+        stage("Build Image") {
+            steps{
+                script{
+                    imt = registry + ":$env.BUILD_ID"
+                    println ("${img}")
+                    dockerImage = docker.build("${img}")
+                }
             }
         }
-        stage('Build environment') {
-            agent docker { image 'python:3.7.2' } }
+
+        stage("testing") {
             steps {
-               echo 'test karthick'
-                sh 'pwd'
+                sh 'docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
             }
         }
-        
+
+        stage("push to Docker hub") {
+            steps{
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com',registryCredentials) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
     }
     post {
         always {
