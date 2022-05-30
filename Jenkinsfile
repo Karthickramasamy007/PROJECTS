@@ -22,6 +22,7 @@ pipeline {
             }
         }
         stage('Build environment') {
+            agent { docker { image 'python:3.7.2' } }
             steps {
                echo 'test karthick'
                 sh 'pwd'
