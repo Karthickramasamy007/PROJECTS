@@ -24,6 +24,7 @@ pipeline {
         stage('Build environment') {
             steps {
                echo 'test karthick'
+                sh 'docker build -t ddddd .'
             }
         }
         
