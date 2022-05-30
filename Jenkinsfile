@@ -26,7 +26,10 @@ pipeline {
                 git branch: 'main', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
                 sh 'mkdir workspace'
                 sh 'git clone https://github.com/Karthickramasamy007/PROJECTS.git'
-                sh 'RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz \  && tar xzvf docker-17.04.0-ce.tgz \  && mv docker/docker /usr/local/bin \  && rm -r docker docker-17.04.0-ce.tgz'
+                sh "RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz \  
+                    && tar xzvf docker-17.04.0-ce.tgz \  
+                    && mv docker/docker /usr/local/bin \  
+                    && rm -r docker docker-17.04.0-ce.tgz"
 
             }
 
