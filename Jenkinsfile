@@ -41,7 +41,7 @@ pipeline {
 
         stage("testing") {
             steps {
-                sh 'docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
+                sh 'Docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
             }
         }
 
