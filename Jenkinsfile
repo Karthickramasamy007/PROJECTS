@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent docker
 
     triggers {
         pollSCM('*/5 * * * 1-5')
@@ -22,7 +22,7 @@ pipeline {
             }
         }
         stage('Build environment') {
-            agent { docker { image 'python:3.7.2' } }
+            agent docker { image 'python:3.7.2' } }
             steps {
                echo 'test karthick'
                 sh 'pwd'
