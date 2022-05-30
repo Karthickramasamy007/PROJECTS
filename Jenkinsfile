@@ -19,41 +19,41 @@ pipeline {
     }
 
   
-        stage("Chekout") {
-            steps{
+    stage("Chekout") {
+        steps{
 
-                git branch: 'main', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
- 
-            }
+            git branch: 'main', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
 
         }
 
-        stage("Build Image") {
-            steps{
-                script{
-                    img = registry + ":$env.BUILD_ID"
-                    println ("${img}")
-                    dockerImage = docker.build("${img}")
-                }
+    }
+
+    stage("Build Image") {
+        steps{
+            script{
+                img = registry + ":$env.BUILD_ID"
+                println ("${img}")
+                dockerImage = docker.build("${img}")
             }
         }
+    }
 
-        stage("testing") {
-            steps {
-                sh 'Docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
-            }
+    stage("testing") {
+        steps {
+            sh 'Docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
         }
+    }
 
-        stage("push to Docker hub") {
-            steps{
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com',registryCredentials) {
-                        dockerImage.push()
-                    }
+    stage("push to Docker hub") {
+        steps{
+            script {
+                docker.withRegistry('https://registry.hub.docker.com',registryCredentials) {
+                    dockerImage.push()
                 }
             }
         }
     }
+    
     post {
         always {
             echo 'always print'
@@ -62,3 +62,4 @@ pipeline {
             echo "Send e-mail, when failed"
         }
     }
+}
