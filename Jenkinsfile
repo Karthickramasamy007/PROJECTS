@@ -54,6 +54,7 @@ pipeline {
                 }
             }
         }
+    }
 
 
         
@@ -65,6 +66,5 @@ pipeline {
                 echo "Send e-mail, when failed"
             }
         }
-    }
 
 }
