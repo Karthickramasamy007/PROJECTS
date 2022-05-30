@@ -32,7 +32,7 @@ pipeline {
         stage("Build Image") {
             steps{
                 script{
-                    imt = registry + ":$env.BUILD_ID"
+                    img = registry + ":$env.BUILD_ID"
                     println ("${img}")
                     dockerImage = docker.build("${img}")
                 }
