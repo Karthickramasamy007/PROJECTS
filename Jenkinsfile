@@ -18,48 +18,53 @@ pipeline {
         
     }
 
-  
-    stage("Chekout") {
-        steps{
+    stages {
 
-            git branch: 'main', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
+        stage("Chekout") {
+            steps{
 
-        }
+                git branch: 'main', credentialsId: 'f11f8219-de25-4d29-8e44-39273b24b1d0', url: 'https://github.com/Karthickramasamy007/PROJECTS.git'
 
-    }
-
-    stage("Build Image") {
-        steps{
-            script{
-                img = registry + ":$env.BUILD_ID"
-                println ("${img}")
-                dockerImage = docker.build("${img}")
             }
-        }
-    }
 
-    stage("testing") {
-        steps {
-            sh 'Docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
         }
-    }
 
-    stage("push to Docker hub") {
-        steps{
-            script {
-                docker.withRegistry('https://registry.hub.docker.com',registryCredentials) {
-                    dockerImage.push()
+        stage("Build Image") {
+            steps{
+                script{
+                    img = registry + ":$env.BUILD_ID"
+                    println ("${img}")
+                    dockerImage = docker.build("${img}")
                 }
             }
         }
-    }
-    
-    post {
-        always {
-            echo 'always print'
+
+        stage("testing") {
+            steps {
+                sh 'Docker run -d --name ${JOB_NAME} -p 5000:5000 ${img}'
+            }
         }
-        failure {
-            echo "Send e-mail, when failed"
+
+        stage("push to Docker hub") {
+            steps{
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com',registryCredentials) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+
+
+        
+        post {
+            always {
+                echo 'always print'
+            }
+            failure {
+                echo "Send e-mail, when failed"
+            }
         }
     }
+
 }
