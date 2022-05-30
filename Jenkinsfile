@@ -32,7 +32,7 @@ pipeline {
         always {
             echo 'always print'
         }
-        filure {
+        failure {
             echo "Send e-mail, when failed"
         }
     }
