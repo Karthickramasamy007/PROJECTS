@@ -1,7 +1,8 @@
 pipeline {
-    agent none
+    agent any
     stages {
-        agent {
+        stage('Build') {
+            agent {
                 docker {
                     image 'gradle:6.7-jdk11'
                     // Run the container on the node specified at the
@@ -13,5 +14,6 @@ pipeline {
             steps {
                 sh 'gradle --version'
             }
+        }
     }
 }
